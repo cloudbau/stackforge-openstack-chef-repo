@@ -40,6 +40,7 @@ Vagrant.configure("2") do |config|
         chef.chef_server_url = chef_server_url
         chef.validation_client_name = validation_client_name
         chef.validation_key_path = validation_key
+        chef.provisioning_path = '/etc/chef'
       end
   end
 
@@ -56,6 +57,7 @@ Vagrant.configure("2") do |config|
         chef.chef_server_url = chef_server_url
         chef.validation_client_name =  validation_client_name
         chef.validation_key_path =  validation_key
+        chef.provisioning_path = '/etc/chef'
       end
   end
 
@@ -71,6 +73,7 @@ Vagrant.configure("2") do |config|
         chef.chef_server_url = chef_server_url
         chef.validation_key_path =  validation_key
         chef.validation_client_name = validation_client_name
+        chef.provisioning_path = '/etc/chef'
       end
   end
 
