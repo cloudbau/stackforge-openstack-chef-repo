@@ -12,7 +12,8 @@
 ## Starting the mutli node setup
 
 1. `knife environment from file environments/vagrant.json`
-2. `vagrant up controller`
-3. `vagrant up network_node`
-4. `vagrant up compute`
-5. Go to https://192.168.100.60 and log in
+2. `knife role from file $(ls roles)`
+3. `vagrant up controller`
+4. `vagrant up network_node`
+5. `vagrant up compute`
+6. Go to https://192.168.100.60 and log in
