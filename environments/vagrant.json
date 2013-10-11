@@ -25,6 +25,8 @@
         "identity-admin": { "host" : "192.168.100.60" },
         "network-api": { "host" : "192.168.100.61" },
         "image-api": { "host" : "192.168.100.60" },
+        "compute-xvpvnc": { "host" : "192.168.100.60" },
+        "compute-novnc": { "host" : "192.168.100.60" },
         "image-registry": { "host" : "192.168.100.60" }
       },
       "image": {
@@ -90,7 +92,14 @@
           "ram_allocation_ratio": 5.0
         },
         "libvirt": {
-          "virt_type": "qemu"
+          "virt_type": "qemu",
+          "bind_interface": "eth1"
+        },
+        "novnc_proxy": {
+          "bind_interface": "eth2"
+        },
+        "xvpvnc_proxy": {
+          "bind_interface": "eth2"
         },
         "networks": [
         {
