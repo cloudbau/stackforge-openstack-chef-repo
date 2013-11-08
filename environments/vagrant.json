@@ -8,7 +8,6 @@
   "default_attributes": {
   },
   "override_attributes": {
-
     "packages": [
       "avahi-daemon",
     "libxslt1-dev",
@@ -19,22 +18,26 @@
       "root_network_acl": "%"
     },
     "openstack": {
+      "release": "havana",
+      "apt": {
+        "components": [ "precise-updates/havana", "main" ]
+      },
       "endpoints": {
         "compute-api": { "host" : "192.168.100.60" },
         "identity-api": { "host" : "192.168.100.60" },
         "identity-admin": { "host" : "192.168.100.60" },
-        "network-api": { "host" : "192.168.100.61" },
+        "network-api": { "host" : "192.168.100.60" },
         "image-api": { "host" : "192.168.100.60" },
         "compute-xvpvnc": { "host" : "192.168.100.60" },
         "compute-novnc": { "host" : "192.168.100.60" },
         "image-registry": { "host" : "192.168.100.60" }
       },
       "image": {
-        "api": { "bind_interface": "eth2" },
-        "registry": { "bind_interface": "eth2" }
+        "api": { "bind_interface": "eth3" },
+        "registry": { "bind_interface": "eth3" }
       },
       "db": {
-        "bind_interface": "eth2",
+        "bind_interface": "eth3",
         "compute": { "host": "192.168.100.60" },
         "identity": { "host": "192.168.100.60" },
         "image": { "host": "192.168.100.60" },
@@ -45,11 +48,11 @@
       },
 
       "mq": { 
-        "bind_interface": "eth2"
+        "bind_interface": "eth3"
       },
       "developer_mode": true,
       "identity": {
-        "bind_interface": "eth2"
+        "bind_interface": "eth3"
       },
       "image": {
         "rabbit": { "host": "192.168.100.60"},
@@ -74,8 +77,10 @@
           "tenant_network_type": "gre",
           "enable_tunneling": "True",
           "tunnel_id_ranges": "1:1000",
-          "local_ip_interface": "eth1",
-          "external_network_bridge_interface": "eth2"
+          "local_ip_interface": "eth2"
+        },
+        "l3": {
+          "external_network_bridge_interface": "eth3"
         },
         "rabbit_server_chef_role": "os-compute-single-controller",
         "rabbit": { "host": "192.168.100.60"}
@@ -85,7 +90,7 @@
         "identity_service_chef_role": "os-compute-single-controller",
         "network": {
           "fixed_range": "192.168.100.0/24",
-          "public_interface": "eth2",
+          "public_interface": "eth3",
           "service_type": "quantum"
         },
         "config": {
@@ -93,13 +98,13 @@
         },
         "libvirt": {
           "virt_type": "qemu",
-          "bind_interface": "eth1"
+          "bind_interface": "eth2"
         },
         "novnc_proxy": {
-          "bind_interface": "eth2"
+          "bind_interface": "eth3"
         },
         "xvpvnc_proxy": {
-          "bind_interface": "eth2"
+          "bind_interface": "eth3"
         },
         "networks": [
         {
@@ -108,7 +113,7 @@
           "num_networks": "1",
           "network_size": "255",
           "bridge": "br100",
-          "bridge_dev": "eth2",
+          "bridge_dev": "eth3",
           "dns1": "8.8.8.8",
           "dns2": "8.8.4.4"
         }
