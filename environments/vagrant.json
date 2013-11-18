@@ -36,6 +36,11 @@
         "api": { "bind_interface": "eth3" },
         "registry": { "bind_interface": "eth3" }
       },
+      "dashboard": {
+        "platform": {
+          "horizon_packages": ["lessc", "python-lesscpy", "openstack-dashboard"]
+        }
+      }
       "db": {
         "bind_interface": "eth3",
         "compute": { "host": "192.168.100.60" },

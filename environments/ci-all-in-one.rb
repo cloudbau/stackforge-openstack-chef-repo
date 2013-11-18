@@ -1,5 +1,8 @@
-name "ci"
+name "ci-all-in-one"
 description "Environment used in testing the upstream cookbooks and reference Chef repository"
+
+ip_address = "10.0.3.6"
+dashboard_path = "/opt/cloudbau/horizon-virtualenv/openstack_dashboard"
 
 override_attributes(
   "postgresql" => {
@@ -7,36 +10,79 @@ override_attributes(
         {:type => 'local', :db => 'all', :user => 'postgres', :addr => nil, :method => 'ident'},
         {:type => 'local', :db => 'all', :user => 'all', :addr => nil, :method => 'ident'},
         {:type => 'host', :db => 'all', :user => 'all', :addr => '127.0.0.1/32', :method => 'md5'},
-        {:type => 'host', :db => 'all', :user => 'all', :addr => '::1/128', :method => 'md5'}# ,
-        #{:type => 'host', :db => 'all', :user => 'all', :addr => '10.0.103.5/32', :method => 'md5'} 
+        {:type => 'host', :db => 'all', :user => 'all', :addr => '::1/128', :method => 'md5'}
     ]
   },
   "openstack" => {
+    "apt" => {
+       "uri" => "http://cloudbau-packages.s3.amazonaws.com/havana-for-tempest/repo",
+       "components" => ["cloudbau", "main"]
+    },
     "auth" => {
       "validate_certs" => false
     },
+    "dashboard" => {
+      "platform" => {
+        "mysql_python_packages" => [],
+	"postgresql_python_packages" => [],
+        "memcache_python_packages" => [],
+        "horizon_packages" => ["cloudbau-horizon"],
+        "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
+      },
+      "static_path" => "#{dashboard_path}/static",
+      "local_settings_path" => "#{dashboard_path}/local/local_settings.py",
+      "dash_path" => "#{dashboard_path}",
+      "python_path" => "/opt/cloudbau/horizon-virtualenv/lib/python2.7/site-packages",
+      "stylesheet_path" => "#{dashboard_path}/templates/_stylesheets.html"
+    },
     "network" => {
+      "platform" => {
+        "mysql_python_packages" => [],
+        "postgresql_python_packages" => [],
+        "nova_network_packages" => [],
+        "quantum_lb_packages" => ["cloudbau-neutron"],
+        "quantum_packages" => ["cloudbau-neutron"],
+        "quantum_client_packages" => [],
+        "quantum_dhcp_packages" => ["cloudbau-neutron"],
+        "quantum_l3_packages" => [],
+        "quantum_openvswitch_agent_packages" => [],
+        "quantum_linuxbridge_agent_packages" => [],
+        "quantum_metadata_agent_packages" => ["cloudbau-neutron"],
+        "quantum_plugin_package" => "cloudbau-neutron",
+        "quantum_server_packages" => ["cloudbau-neutron"],
+        "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
+      },
       "core_plugin" => "neutron.plugins.linuxbridge.lb_neutron_plugin.LinuxBridgePluginV2",
       "interface_driver" => "neutron.agent.linux.interface.BridgeInterfaceDriver",
       "l3" => {
         "external_network_bridge_interface" => "eth0",
-        "external_network_bridge" => ""  # Linux bridge
+        "external_network_bridge" => "" 
       },
       "linuxbridge" => {
-         "tenant_network_type" => "vlan",
-         "network_vlan_ranges" => "physnet1:1000:2999",
-         "physical_interface_mappings" => "physnet1:eth0"
+         "tenant_network_type" => "local"
       },
       "rabbit" => {
-         "host" => "10.0.103.5"
+         "host" => ip_address
       }
     },
     "block-storage" => {
+      "platform" => {
+        "mysql_python_packages" => [],
+        "postgresql_python_packages" => [],
+        "cinder_common_packages" => ["cloudbau-cinder"],
+        "cinder_api_packages" => [],
+        "cinder_volume_packages" => ["cloudbau-cinder"],
+        "cinder_scheduler_packages" => ["cloudbau-cinder"],
+        "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
+      },
       "syslog" => {
         "use" => false
       },
       "api" => {
         "ratelimit" => "False"
+      },
+      "rabbit" => {
+         "host" => ip_address
       },
       "debug" => true,
       "image_api_chef_role" => "os-image",
@@ -47,14 +93,38 @@ override_attributes(
       }
     },
     "compute" => {
+      "platform" => {
+        "mysql_python_packages" => [],
+        "postgresql_python_packages" => [],
+        "api_ec2_packages" => ["cloudbau-nova"],
+        "api_os_compute_packages" => ["cloudbau-nova"],
+        "neutron_python_packages" => [],
+        "compute_api_metadata_packages" => ["cloudbau-nova"],
+        "compute_compute_packages" => ["cloudbau-nova"],
+        "compute_network_packages" => ["iptables", "cloudbau-nova"],
+        "compute_scheduler_packages" => ["cloudbau-nova"],
+        "compute_conductor_packages" => ["cloudbau-nova"],
+        "compute_vncproxy_packages" => [],
+        "compute_vncproxy_consoleauth_packages" => ["cloudbau-nova"],
+        "compute_cert_packages" => ["cloudbau-nova"],
+        "common_packages" => ["cloudbau-nova"],
+        "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
+      },
+      "config" => {
+        # FIXME(Mouad): I'am still not sure why nova (default value) didn't work !?
+        "default_schedule_zone" => "internal",
+        "availability_zone" => "internal",
+        "storage_availability_zone" => "internal"
+      },
       "rabbit" => {
-        "host" => "10.0.103.5"
+        "host" => ip_address
       },
       "syslog" => {
         "use" => false
       },
       "libvirt" => {
-        "bind_interface" => "eth0.211"
+        "virt_type" => "qemu", # FIXME(Mouad): Test kvm again.
+        "bind_interface" => "eth0"
       },
       "novnc_proxy" => {
         "bind_interface" => "eth0"
@@ -76,7 +146,11 @@ override_attributes(
       },
       "network" => {
         "fixed_range" => "10.0.0.0/8",
-        "plugins" => ["linuxbridge", "dhcp_agent"]
+        "plugins" => ["linuxbridge", "dhcp_agent"],
+        "quantum" => {
+          "libvirt_vif_driver" => "nova.virt.libvirt.vif.LibvirtGenericVIFDriver",
+          "linuxnet_interface_driver" => "nova.network.linux_net.LinuxBridgeInterfaceDriver"
+        }
       },
       "networks" => [
       ]
@@ -109,78 +183,85 @@ override_attributes(
     "developer_mode" => true,
     "endpoints" => {
       "compute-api" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "8774",
         "path" => "/v2/%(tenant_id)s"
       },
       "compute-ec2-admin" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "8773",
         "path" => "/services/Admin"
       },
       "compute-ec2-api" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "8773",
         "path" => "/services/Cloud"
       },
       "compute-xvpvnc" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "6081",
         "path" => "/console"
       },
       "compute-novnc" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "6080",
         "path" => "/vnc_auto.html"
       },
       "image-api" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "9292",
-        "path" => "/v2"
+        # XXX(Mouad): image-api should not include version, else tempest run fail.
+        "path" => ""
       },
       "image-registry" => {
-        "host" => "10.0.103.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "9191",
-        "path" => "/v2"
+        "path" => "v2"
       },
       "identity-api" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "5000",
         "path" => "/v2.0"
       },
       "identity-admin" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "35357",
         "path" => "/v2.0"
       },
       "volume-api" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "8776",
         "path" => "/v1/%(tenant_id)s"
       },
       "metering-api" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "8777",
         "path" => "/v1"
       },
       "network-api" => {
-        "host" => "10.0.3.5",
+        "host" => ip_address,
         "scheme" => "http",
         "port" => "9696"
       }
     },
     "identity" => {
+      "platform" => {
+        "keystone_packages" => ["cloudbau-keystone", "cloudbau-nova"],
+        "mysql_python_packages" => [],
+        "postgresql_python_packages" => [],
+        "package_options" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
+      },
       "admin_user" => "ksadmin",
       "bind_interface" => "eth0",
       "catalog" => {
@@ -238,6 +319,12 @@ override_attributes(
       }
     },
     "image" => {
+      "platform" => {
+        "mysql_python_packages" => [],
+        "postgresql_python_packages" => [],
+        "image_packages" => ["cloudbau-glance"],
+        "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
+      },
       "api" => {
         "bind_interface" => "eth0"
       },
@@ -246,7 +333,7 @@ override_attributes(
       "image_upload" => true,
       "rabbit_server_chef_role" => "os-ops-messaging",
       "registry" => {
-        "bind_interface" => "eth0.211"
+        "bind_interface" => "eth0"
       },
       "syslog" => {
         "use" => false
@@ -259,8 +346,7 @@ override_attributes(
       ]
     },
     "mq" => {
-      "bind_interface" => "eth0.211",
-      "host" => "10.0.103.5",
+      "bind_interface" => "eth0",
       "user" => "guest"
     }
   }
