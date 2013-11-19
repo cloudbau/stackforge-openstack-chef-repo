@@ -3,5 +3,5 @@ description "This will deploy all of the services for Openstack Compute to funct
 run_list(
   "role[os-compute-single-controller]",
   "role[os-compute-worker]",
-  "recipe[stackforge-havana::neutron-common]"
+  "recipe[openstack-network-wrapper::neutron-common]"
 )

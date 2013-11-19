@@ -29,4 +29,4 @@ cookbook 'openstack-ops-messaging', github: 'stackforge/cookbook-openstack-ops-m
 
 cookbook 'chef-server'
 
-#cookbook 'stackforge-havana', path: 'cookbooks/cookbook-openstack-network-wrapper'
+cookbook 'openstack-network-wrapper', github: 'cloudbau/cookbook-openstack-network-wrapper'

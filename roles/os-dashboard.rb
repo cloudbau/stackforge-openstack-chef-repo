@@ -3,5 +3,5 @@ description "Horizon server"
 run_list(
   "role[os-base]",
   "recipe[openstack-dashboard::server]",
-  "recipe[stackforge-havana::horizon-server]"
+  "recipe[openstack-network-wrapper::horizon-server]"
   )
