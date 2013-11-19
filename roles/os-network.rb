@@ -2,6 +2,7 @@ name "os-network"
 description "Configures OpenStack networking, managed by attribute for either nova-network or quantum"
 run_list(
   "role[os-base]",
+  "recipe[openstack-network-wrapper::neutron-common]",
   "recipe[openstack-network::identity_registration]",
   "recipe[openstack-network::server]",
   "recipe[openstack-network-wrapper::neutron-l2-agent]",
