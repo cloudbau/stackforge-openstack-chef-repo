@@ -1,18 +1,10 @@
 name "ci-all-in-one"
 description "Environment used in testing the upstream cookbooks and reference Chef repository"
 
-ip_address = "10.0.3.6"
+ip_address = "10.0.3.5"
 dashboard_path = "/opt/cloudbau/horizon-virtualenv/openstack_dashboard"
 
 override_attributes(
-  "postgresql" => {
-    "pg_hba" => [
-        {:type => 'local', :db => 'all', :user => 'postgres', :addr => nil, :method => 'ident'},
-        {:type => 'local', :db => 'all', :user => 'all', :addr => nil, :method => 'ident'},
-        {:type => 'host', :db => 'all', :user => 'all', :addr => '127.0.0.1/32', :method => 'md5'},
-        {:type => 'host', :db => 'all', :user => 'all', :addr => '::1/128', :method => 'md5'}
-    ]
-  },
   "openstack" => {
     "apt" => {
        "uri" => "http://cloudbau-packages.s3.amazonaws.com/havana-for-tempest/repo",
@@ -47,19 +39,16 @@ override_attributes(
         "quantum_l3_packages" => [],
         "quantum_openvswitch_agent_packages" => [],
         "quantum_linuxbridge_agent_packages" => [],
+        "quantum_openvswitch_packages" => ["openvswitch-datapath-dkms", "openvswitch-switch", "bridge-utils"],
         "quantum_metadata_agent_packages" => ["cloudbau-neutron"],
+        "quantum_openvswitch_agent_service" => "neutron-openvswitch-agent",
         "quantum_plugin_package" => "cloudbau-neutron",
         "quantum_server_packages" => ["cloudbau-neutron"],
         "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
       },
-      "core_plugin" => "neutron.plugins.linuxbridge.lb_neutron_plugin.LinuxBridgePluginV2",
-      "interface_driver" => "neutron.agent.linux.interface.BridgeInterfaceDriver",
       "l3" => {
-        "external_network_bridge_interface" => "eth0",
-        "external_network_bridge" => "" 
-      },
-      "linuxbridge" => {
-         "tenant_network_type" => "local"
+        "external_network_bridge_interface" => "",
+        "external_network_bridge" => "br-ex" 
       },
       "rabbit" => {
          "host" => ip_address
@@ -146,10 +135,8 @@ override_attributes(
       },
       "network" => {
         "fixed_range" => "10.0.0.0/8",
-        "plugins" => ["linuxbridge", "dhcp_agent"],
+        "plugins" => ["openvswitch", "dhcp_agent"],
         "quantum" => {
-          "libvirt_vif_driver" => "nova.virt.libvirt.vif.LibvirtGenericVIFDriver",
-          "linuxnet_interface_driver" => "nova.network.linux_net.LinuxBridgeInterfaceDriver"
         }
       },
       "networks" => [
@@ -339,7 +326,7 @@ override_attributes(
         "use" => false
       },
       "upload_image" => {
-        "cirros" => "http://hypnotoad/cirros-0.3.0-x86_64-disk.img",
+        "cirros" => "https://launchpad.net/cirros/trunk/0.3.0/+download/cirros-0.3.0-x86_64-disk.img",
       },
       "upload_images" => [
         "cirros"
