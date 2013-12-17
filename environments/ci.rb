@@ -1,8 +1,8 @@
 name "ci"
 description "Environment used in testing the upstream cookbooks and reference Chef repository"
 
-controller_ip_address = "10.0.3.6"
 dashboard_path = "/opt/cloudbau/horizon-virtualenv/openstack_dashboard"
+debian_pkg_repository = "http://cloudbau-packages.s3.amazonaws.com/havana-for-tempest/repo"
 
 override_attributes(
   "postgresql" => {
@@ -11,12 +11,17 @@ override_attributes(
         {:type => 'local', :db => 'all', :user => 'all', :addr => nil, :method => 'ident'},
         {:type => 'host', :db => 'all', :user => 'all', :addr => '127.0.0.1/32', :method => 'md5'},
         {:type => 'host', :db => 'all', :user => 'all', :addr => '::1/128', :method => 'md5'},
-        {:type => 'host', :db => 'all', :user => 'all', :addr => controller_ip_address + "/32", :method => 'md5'}
+        # FIXME: Need to automatically set controller ip here.
+        # {:type => 'host', :db => 'all', :user => 'all', :addr => controller_ip_address + "/32", :method => 'md5'}
     ]
+  },
+  "mysql" => {
+    "allow_remote_root" => true,
+    "root_network_acl" => "%"
   },
   "openstack" => {
     "apt" => {
-       "uri" => "http://cloudbau-packages.s3.amazonaws.com/havana-for-tempest/repo",
+       "uri" => debian_pkg_repository,
        "components" => ["cloudbau", "main"]
     },
     "auth" => {
@@ -25,7 +30,7 @@ override_attributes(
     "dashboard" => {
       "platform" => {
         "mysql_python_packages" => [],
-	"postgresql_python_packages" => [],
+	    "postgresql_python_packages" => [],
         "memcache_python_packages" => [],
         "horizon_packages" => ["cloudbau-horizon"],
         "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
@@ -63,11 +68,9 @@ override_attributes(
       },
       "l3" => {
         "external_network_bridge_interface" => "",
-        "external_network_bridge" => "br-ex" 
+        "external_network_bridge" => "br-ex"
       },
-      "rabbit" => {
-         "host" => controller_ip_address
-      }
+      "allow_overlapping_ips" => "True"
     },
     "block-storage" => {
       "platform" => {
@@ -84,9 +87,6 @@ override_attributes(
       },
       "api" => {
         "ratelimit" => "False"
-      },
-      "rabbit" => {
-         "host" => controller_ip_address
       },
       "debug" => true,
       "image_api_chef_role" => "os-image",
@@ -112,16 +112,8 @@ override_attributes(
         "compute_vncproxy_consoleauth_packages" => ["cloudbau-nova"],
         "compute_cert_packages" => ["cloudbau-nova"],
         "common_packages" => ["cloudbau-nova"],
+        "cinder_volume_packages" => ["open-iscsi", "open-iscsi-utils"],
         "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
-      },
-      "config" => {
-        # FIXME(Mouad): I'am still not sure why nova (default value) didn't work !?
-        "default_schedule_zone" => "internal",
-        "availability_zone" => "internal",
-        "storage_availability_zone" => "internal"
-      },
-      "rabbit" => {
-        "host" => controller_ip_address
       },
       "syslog" => {
         "use" => false
@@ -156,115 +148,86 @@ override_attributes(
       ]
     },
     "db" => {
-      "bind_interface" => "eth0",
-      "service_type" => "postgresql",
-      "compute" => {
-        "host" => controller_ip_address,
-        "port" => "5432"
-      },
-      "identity" => {
-        "host" => controller_ip_address,
-        "port" => "5432"
-      },
-      "image" => {
-        "host" => controller_ip_address,
-        "port" => "5432"
-      },
-      "network" => {
-        "host" => controller_ip_address,
-        "port" => "5432"
-      },
-      "volume" => {
-        "host" => controller_ip_address,
-        "port" => "5432"
-      },
-      "dashboard" => {
-        "host" => controller_ip_address,
-        "port" => "5432"
-      },
-      "metering" => {
-        "host" => controller_ip_address,
-        "port" => "5432"
-      }
+      "bind_interface" => "eth0"
     },
     "developer_mode" => true,
     "endpoints" => {
       "compute-api" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "8774",
         "path" => "/v2/%(tenant_id)s"
       },
       "compute-ec2-admin" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "8773",
         "path" => "/services/Admin"
       },
       "compute-ec2-api" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "8773",
         "path" => "/services/Cloud"
       },
       "compute-xvpvnc" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "6081",
         "path" => "/console"
       },
       "compute-novnc" => {
-        "host" => controller_ip_address,
-        "scheme" => "http",
+        "bind_interface" => "eth0",
+        "scheme" => "https",
         "port" => "6080",
         "path" => "/vnc_auto.html"
       },
       "image-api" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "9292",
         # XXX(Mouad): image-api should not include version, else tempest run fail.
         "path" => ""
       },
       "image-registry" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "9191",
         "path" => "v2"
       },
       "identity-api" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "5000",
         "path" => "/v2.0"
       },
       "identity-admin" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "35357",
         "path" => "/v2.0"
       },
       "volume-api" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "8776",
         "path" => "/v1/%(tenant_id)s"
       },
       "metering-api" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "8777",
         "path" => "/v1"
       },
       "network-api" => {
-        "host" => controller_ip_address,
+        "bind_interface" => "eth0",
         "scheme" => "http",
         "port" => "9696"
       }
     },
     "identity" => {
       "platform" => {
-        "keystone_packages" => ["cloudbau-keystone", "cloudbau-nova"],
+        "keystone_packages" => ["cloudbau-keystone"],
         "mysql_python_packages" => [],
         "postgresql_python_packages" => [],
         "package_options" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef' --force-yes"
