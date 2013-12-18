@@ -103,7 +103,7 @@
     "openstack-common-wrapper": {
       "locked_version": "0.1.0",
       "git": "https://github.com/cloudbau/cookbook-openstack-common-wrapper.git",
-      "ref": "41f48b5eaf0c1762786472a6d3f123526a3e2e9d"
+      "ref": "12d38c9dee6e80cecdb8e06589f4bde63e75e16f"
     },
     "openstack-compute-wrapper": {
       "locked_version": "0.1.0",
@@ -128,7 +128,7 @@
     "openstack-network-wrapper": {
       "locked_version": "0.2.0",
       "git": "https://github.com/cloudbau/cookbook-openstack-network-wrapper.git",
-      "ref": "2c572ec618b83b8e7a5f01f91b4350018947b186"
+      "ref": "5983067f0da62c31c9fc88c343052b63f12bfc35"
     },
     "runit": {
       "locked_version": "1.2.0"
