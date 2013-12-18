@@ -29,5 +29,9 @@ cookbook 'openstack-ops-messaging', github: 'stackforge/cookbook-openstack-ops-m
 
 cookbook 'chef-server'
 
-cookbook 'openstack-network-wrapper', github: 'cloudbau/cookbook-openstack-network-wrapper', protocol: :https
 cookbook 'openstack-common-wrapper', github: 'cloudbau/cookbook-openstack-common-wrapper', protocol: :https
+cookbook 'openstack-compute-wrapper', github: 'cloudbau/cookbook-openstack-compute-wrapper', protocol: :https
+cookbook 'openstack-image-wrapper', github: 'cloudbau/cookbook-openstack-image-wrapper', protocol: :https
+cookbook 'openstack-dashboard-wrapper', github: 'cloudbau/cookbook-openstack-dashboard-wrapper', protocol: :https
+cookbook 'openstack-block-storage-wrapper', github: 'cloudbau/cookbook-openstack-block-storage-wrapper', protocol: :https
+cookbook 'openstack-network-wrapper', github: 'cloudbau/cookbook-openstack-network-wrapper', protocol: :https

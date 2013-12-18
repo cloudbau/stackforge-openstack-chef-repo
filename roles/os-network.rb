@@ -4,9 +4,10 @@ run_list(
   "role[os-base]",
   "recipe[openstack-network::identity_registration]",
   "recipe[openstack-network::server]",
-  "recipe[openstack-network-wrapper::neutron-l2-agent]",
+  "recipe[openstack-network-wrapper::l2-agent]",
   "recipe[openstack-network::l3_agent]",
   "recipe[openstack-network::dhcp_agent]",
   "recipe[openstack-network::metadata_agent]",
-  "recipe[openstack-network-wrapper::neutron-common]"
+  "recipe[openstack-network-wrapper::common]",
+  "recipe[openstack-network-wrapper::l3-agent]"
   )

@@ -5,5 +5,7 @@ run_list(
   "role[os-block-storage-api]",
   "role[os-block-storage-scheduler]",
   "role[os-block-storage-volume]",
+  "recipe[openstack-block-storage-wrapper::api]",
+  "recipe[openstack-block-storage-wrapper::volume]",
   "recipe[openstack-block-storage::identity_registration]"
   )

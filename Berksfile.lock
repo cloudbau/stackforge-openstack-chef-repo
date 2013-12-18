@@ -100,15 +100,35 @@
     "chef-server": {
       "locked_version": "2.0.0"
     },
-    "openstack-network-wrapper": {
-      "locked_version": "0.2.0",
-      "git": "https://github.com/cloudbau/cookbook-openstack-network-wrapper.git",
-      "ref": "2c572ec618b83b8e7a5f01f91b4350018947b186"
-    },
     "openstack-common-wrapper": {
       "locked_version": "0.1.0",
       "git": "https://github.com/cloudbau/cookbook-openstack-common-wrapper.git",
       "ref": "41f48b5eaf0c1762786472a6d3f123526a3e2e9d"
+    },
+    "openstack-compute-wrapper": {
+      "locked_version": "0.1.0",
+      "git": "https://github.com/cloudbau/cookbook-openstack-compute-wrapper.git",
+      "ref": "46c672b25c0c5672ab2fd0df99150d4334ea4265"
+    },
+    "openstack-image-wrapper": {
+      "locked_version": "0.1.0",
+      "git": "https://github.com/cloudbau/cookbook-openstack-image-wrapper.git",
+      "ref": "7da847e9805d9f987021aafc1073e1c47b7e04bd"
+    },
+    "openstack-dashboard-wrapper": {
+      "locked_version": "0.1.0",
+      "git": "https://github.com/cloudbau/cookbook-openstack-dashboard-wrapper.git",
+      "ref": "4952e9f24033bb1a9eb6c0ef9ef72659f7abe99b"
+    },
+    "openstack-block-storage-wrapper": {
+      "locked_version": "0.1.0",
+      "git": "https://github.com/cloudbau/cookbook-openstack-block-storage-wrapper.git",
+      "ref": "bf35e7c268d28a98e60fb772217897dd2fbc41cb"
+    },
+    "openstack-network-wrapper": {
+      "locked_version": "0.2.0",
+      "git": "https://github.com/cloudbau/cookbook-openstack-network-wrapper.git",
+      "ref": "2c572ec618b83b8e7a5f01f91b4350018947b186"
     },
     "runit": {
       "locked_version": "1.2.0"
