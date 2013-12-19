@@ -121,9 +121,9 @@
       "ref": "4952e9f24033bb1a9eb6c0ef9ef72659f7abe99b"
     },
     "openstack-block-storage-wrapper": {
-      "locked_version": "0.1.0",
+      "locked_version": "0.2.0",
       "git": "https://github.com/cloudbau/cookbook-openstack-block-storage-wrapper.git",
-      "ref": "cc5165b9df8b9f5d8f93c493721c5dab8e2f6b7a"
+      "ref": "5a783aea01416f65af6cbda6173587e769ed052c"
     },
     "openstack-network-wrapper": {
       "locked_version": "0.2.0",
