@@ -118,7 +118,7 @@
     "openstack-dashboard-wrapper": {
       "locked_version": "0.1.0",
       "git": "https://github.com/cloudbau/cookbook-openstack-dashboard-wrapper.git",
-      "ref": "4952e9f24033bb1a9eb6c0ef9ef72659f7abe99b"
+      "ref": "082acc126300fd221e8c6e1bd4bad221cd143719"
     },
     "openstack-block-storage-wrapper": {
       "locked_version": "0.2.0",
