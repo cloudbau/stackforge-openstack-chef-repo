@@ -128,7 +128,7 @@
     "openstack-network-wrapper": {
       "locked_version": "0.2.0",
       "git": "https://github.com/cloudbau/cookbook-openstack-network-wrapper.git",
-      "ref": "2ed64b625735a931b6891280e860004f9048d182"
+      "ref": "7ee508789400d402f5972c370479454a4868e19f"
     },
     "runit": {
       "locked_version": "1.2.0"
