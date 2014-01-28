@@ -42,6 +42,21 @@
     "yum": {
       "locked_version": "2.3.4"
     },
+    "runit": {
+      "locked_version": "1.2.0"
+    },
+    "git": {
+      "locked_version": "2.3.0"
+    },
+    "dmg": {
+      "locked_version": "1.1.0"
+    },
+    "windows": {
+      "locked_version": "1.8.6"
+    },
+    "selinux": {
+      "locked_version": "0.5.2"
+    },
     "openstack-block-storage": {
       "locked_version": "7.2.2",
       "git": "https://github.com/stackforge/cookbook-openstack-block-storage.git",
@@ -128,34 +143,19 @@
     "openstack-network-wrapper": {
       "locked_version": "0.2.0",
       "git": "https://github.com/cloudbau/cookbook-openstack-network-wrapper.git",
-      "ref": "7ee508789400d402f5972c370479454a4868e19f"
+      "ref": "6cef2e17dc551f85891f9032a1a542e3bc2ebad4"
     },
-    "runit": {
-      "locked_version": "1.2.0"
-    },
-    "selinux": {
-      "locked_version": "0.5.2"
+    "chef_handler": {
+      "locked_version": "1.1.4"
     },
     "python": {
-      "locked_version": "1.3.4"
+      "locked_version": "1.4.4"
     },
     "sysctl": {
       "locked_version": "0.3.5"
     },
     "statsd": {
       "locked_version": "0.0.1"
-    },
-    "git": {
-      "locked_version": "2.3.0"
-    },
-    "dmg": {
-      "locked_version": "1.1.0"
-    },
-    "windows": {
-      "locked_version": "1.8.6"
-    },
-    "chef_handler": {
-      "locked_version": "1.1.4"
     }
   }
 }

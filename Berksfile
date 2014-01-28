@@ -14,6 +14,11 @@ cookbook 'postgresql', '3.1.0'
 cookbook 'rabbitmq', '2.3.0'
 cookbook 'xfs', '1.1.0'
 cookbook 'yum', '2.3.4'
+cookbook 'runit', '1.2.0'
+cookbook 'git', '2.3.0'
+cookbook 'dmg', '1.1.0'
+cookbook 'windows', '1.8.6'
+cookbook 'selinux', '0.5.2'
 
 cookbook 'openstack-block-storage', github: 'stackforge/cookbook-openstack-block-storage', protocol: :https
 cookbook 'openstack-common', github: 'stackforge/cookbook-openstack-common', protocol: :https

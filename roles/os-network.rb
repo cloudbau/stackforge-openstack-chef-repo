@@ -9,5 +9,6 @@ run_list(
   "recipe[openstack-network-wrapper::dhcp-agent]",
   "recipe[openstack-network::metadata_agent]",
   "recipe[openstack-network-wrapper::common]",
-  "recipe[openstack-network-wrapper::l3-agent]"
+  "recipe[openstack-network-wrapper::l3-agent]",
+  "recipe[openstack-network-wrapper::ml2-plugin]",
   )
